@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Comentarios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #eee;
+      padding: 20px;
+    }
+    h2 {
+      color: #4caf50;
+      text-align: center;
+      font-size: 28px;
+    }
+    h3 {
+      margin-top: 20px;
+      color: #ff9800;
+    }
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .card {
+      background: #222;
+      border: 2px solid #444;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      background: #333;
+      border-color: #4caf50;
+      transform: scale(1.05);
+    }
+    .card.seleccionada {
+      background: #2e7d32;
+      border-color: #ff9800;
+      color: white;
+      font-weight: bold;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-top: 15px;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: #eee;
+      resize: none;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      background: #222;
+      color: #eee;
+    }
+    button {
+      margin-top: 10px;
+      padding: 12px 20px;
+      border: none;
+      background: #4caf50;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .secondary-btn {
+      background: #ff9800;
+      margin-left: 10px;
+    }
+    .secondary-btn:hover {
+      background: #e68900;
+    }
+    .mensaje {
+      margin-top: 10px;
+      text-align: center;
+      display: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Generador de Comentarios</h2>
+  <p style="text-align:center">Selecciona una plantilla base, serie/modelo y acciones realizadas:</p>
+
+  <!-- Plantillas -->
+  <label for="plantilla">Plantilla de comentario:</label>
+  <select id="plantilla" style="margin-top:10px; font-size:16px; padding:8px; width:100%; border-radius:8px;"></select>
+
+  <!-- Serie y modelo -->
+  <h3>Datos del equipo</h3>
+  <input type="text" id="serie" placeholder="Número de serie">
+  <input type="text" id="modelo" placeholder="Modelo del equipo">
+
+  <!-- Lista de acciones -->
+  <h3>Acciones disponibles</h3>
+  <div class="card-container" id="accionesContainer"></div>
+
+  <button onclick="generarComentario()">Generar Comentario</button>
+  <button class="secondary-btn" onclick="limpiarSeleccion()">🧹 Limpiar selección</button>
+
+  <textarea id="resultado" readonly></textarea>
+  <button onclick="copiarTexto()">📋 Copiar al portapapeles</button>
+  <div id="mensaje" class="mensaje"></div>
+
+  <script>
+    // Plantillas iniciales
+    const plantillasBase = [
+      "Buenos días, se revisa el requerimiento y se realiza el siguiente procedimiento:",
+      "Estimado usuario, se efectúan las siguientes acciones para atender el requerimiento:",
+      "Se realiza análisis y se aplican los procedimientos correspondientes:"
+    ];
+
+    // Acciones disponibles
+    const acciones = [
+      "Se ejecuta sfc /scannow",
+      "Se limpian archivos temporales",
+      "Se limpia imagen de Windows",
+      "Se realiza desfragmentación de disco",
+      "Se aplica batch de lentitud",
+      "Se ejecuta HP Diagnostic",
+      "Se reconstruye indización de archivos"
+    ];
+
+    function cargarPlantillas() {
+      const select = document.getElementById("plantilla");
+      select.innerHTML = "";
+      plantillasBase.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p;
+        option.textContent = p;
+        select.appendChild(option);
+      });
+    }
+
+    function cargarAcciones() {
+      const cont = document.getElementById("accionesContainer");
+      cont.innerHTML = "";
+      acciones.forEach(a => {
+        const div = document.createElement("div");
+        div.classList.add("card");
+        div.textContent = a;
+        div.onclick = () => div.classList.toggle("seleccionada");
+        cont.appendChild(div);
+      });
+    }
+
+    function generarComentario() {
+      const base = document.getElementById("plantilla").value;
+      const serie = document.getElementById("serie").value.trim();
+      const modelo = document.getElementById("modelo").value.trim();
+
+      const seleccionadas = document.querySelectorAll(".card.seleccionada");
+      let accionesTexto = "";
+      seleccionadas.forEach(c => accionesTexto += "- " + c.textContent + "\n");
+
+      let datosEquipo = "";
+      if (serie || modelo) {
+        datosEquipo = `\n[Equipo: ${modelo || "N/A"} | Serie: ${serie || "N/A"}]\n`;
+      }
+
+      document.getElementById("resultado").value = base + datosEquipo + "\n" + accionesTexto;
+    }
+
+    function limpiarSeleccion() {
+      document.querySelectorAll(".card").forEach(c => c.classList.remove("seleccionada"));
+      document.getElementById("resultado").value = "";
+      document.getElementById("serie").value = "";
+      document.getElementById("modelo").value = "";
+    }
+
+    function mostrarMensaje(texto, color="#4caf50") {
+      const msg = document.getElementById("mensaje");
+      msg.textContent = texto;
+      msg.style.color = color;
+      msg.style.display = "block";
+      setTimeout(() => msg.style.display = "none", 2000);
+    }
+
+    function copiarTexto() {
+      const texto = document.getElementById("resultado").value;
+      navigator.clipboard.writeText(texto).then(() => {
+        mostrarMensaje("Comentario copiado ✅");
+      });
+    }
+
+    // Inicializar
+    cargarPlantillas();
+    cargarAcciones();
+  </script>
+</body>
+</html>
