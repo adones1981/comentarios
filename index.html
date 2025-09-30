@@ -173,10 +173,10 @@
 
       let datosEquipo = "";
       if (serie || modelo) {
-        datosEquipo = `\n[Equipo: ${modelo || "N/A"} | Serie: ${serie || "N/A"}]\n`;
+        datosEquipo = "\nEquipo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
       }
 
-      document.getElementById("resultado").value = base + datosEquipo + "\n" + accionesTexto;
+      document.getElementById("resultado").value = base + "\n" + accionesTexto + datosEquipo;
     }
 
     function limpiarSeleccion() {
