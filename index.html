@@ -60,7 +60,7 @@
     }
     textarea {
       width: 100%;
-      height: 230px;
+      height: 260px;
       margin-top: 15px;
       padding: 18px;
       font-size: 18px;
@@ -154,13 +154,11 @@
   <script>
     // Plantillas iniciales
     const plantillasBase = [
-      "se revisa el requerimiento y se realiza el siguiente procedimiento:",
-      "se efectúan las siguientes acciones para atender el requerimiento:",
-      "se realiza análisis y se aplican los procedimientos correspondientes:"
+      "se revisa el requerimiento y se realiza el siguiente procedimiento:"
     ];
 
-    // Acciones disponibles
-    const acciones = [
+    // Acciones normales
+    const accionesNormales = [
       "Se ejecuta sfc /scannow",
       "Se limpian archivos temporales",
       "Se limpia imagen de Windows",
@@ -172,9 +170,12 @@
       "Se configura correo",
       "Se configuran sistemas",
       "Se configura proxy",
-      "Se instala Adobe Acrobat PDF DC",
-       "Se agrega cuenta de usuario como administrador",
-      "Se realizan pruebas en paralelo con usuario NOMBRE: XXXXXXXX Equipo esta operativo según revisión realizada por usuario.",
+      "Se instala Adobe Acrobat PDF DC"
+    ];
+
+    // Acciones de pruebas (sección aparte)
+    const accionesPruebas = [
+      "Se realizan pruebas en paralelo con usuario NOMBRE: XXXXXXXX Equipo este operativo según revisión realizada por usuario.",
       "Se realizan pruebas técnicas en el equipo con cuentas de prueba de MDA, ya que usuario no cuenta con disponibilidad para realizar las pruebas y en caso de que el problema persista se le solicita objetar requerimiento."
     ];
 
@@ -192,7 +193,23 @@
     function cargarAcciones() {
       const cont = document.getElementById("accionesContainer");
       cont.innerHTML = "";
-      acciones.forEach(a => {
+
+      // Sección Acciones normales
+      accionesNormales.forEach(a => {
+        const div = document.createElement("div");
+        div.classList.add("card");
+        div.textContent = a;
+        div.onclick = () => div.classList.toggle("seleccionada");
+        cont.appendChild(div);
+      });
+
+      // Sección Acciones de pruebas
+      const tituloPruebas = document.createElement("h3");
+      tituloPruebas.textContent = "Pruebas";
+      tituloPruebas.style.gridColumn = "1 / -1";
+      cont.appendChild(tituloPruebas);
+
+      accionesPruebas.forEach(a => {
         const div = document.createElement("div");
         div.classList.add("card");
         div.textContent = a;
@@ -207,16 +224,27 @@
       const serie = document.getElementById("serie").value.trim();
       const modelo = document.getElementById("modelo").value.trim();
 
-      const seleccionadas = document.querySelectorAll(".card.seleccionada");
+      // Acciones normales
+      const seleccionadasNormales = Array.from(document.querySelectorAll(".card.seleccionada"))
+        .filter(c => accionesNormales.includes(c.textContent));
       let accionesTexto = "";
-      seleccionadas.forEach(c => accionesTexto += "- " + c.textContent + "\n");
+      seleccionadasNormales.forEach(c => accionesTexto += "- " + c.textContent + "\n");
+
+      // Acciones de pruebas
+      const seleccionadasPruebas = Array.from(document.querySelectorAll(".card.seleccionada"))
+        .filter(c => accionesPruebas.includes(c.textContent));
+      let pruebasTexto = "";
+      if (seleccionadasPruebas.length > 0) {
+        pruebasTexto = "\nPruebas realizadas:\n";
+        seleccionadasPruebas.forEach(c => pruebasTexto += "- " + c.textContent + "\n");
+      }
 
       let datosEquipo = "";
       if (serie || modelo) {
         datosEquipo = "\n---\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
       }
 
-      document.getElementById("resultado").value = `${saludo}, ${base}\n\n${accionesTexto}${datosEquipo}`;
+      document.getElementById("resultado").value = `${saludo}, ${base}\n\n${accionesTexto}${pruebasTexto}${datosEquipo}`;
     }
 
     function limpiarSeleccion() {
