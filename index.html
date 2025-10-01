@@ -235,7 +235,7 @@
         .filter(c => accionesPruebas.includes(c.textContent));
       let pruebasTexto = "";
       if (seleccionadasPruebas.length > 0) {
-        pruebasTexto = "\nPruebas realizadas:\n";
+        pruebasTexto = "\n\n";
         seleccionadasPruebas.forEach(c => pruebasTexto += "- " + c.textContent + "\n");
       }
 
