@@ -13,7 +13,13 @@
     h2 {
       color: #4caf50;
       text-align: center;
-      font-size: 28px;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: center;
+      font-size: 18px;
+      color: #ccc;
     }
     h3 {
       margin-top: 20px;
@@ -28,11 +34,12 @@
     .card {
       background: #222;
       border: 2px solid #444;
-      border-radius: 10px;
-      padding: 15px;
-      font-size: 16px;
+      border-radius: 12px;
+      padding: 18px;
+      font-size: 18px;
       cursor: pointer;
       transition: all 0.3s ease;
+      text-align: center;
     }
     .card:hover {
       background: #333;
@@ -47,22 +54,23 @@
     }
     textarea {
       width: 100%;
-      height: 220px;
+      height: 230px;
       margin-top: 15px;
-      padding: 15px;
-      font-size: 16px;
-      border-radius: 10px;
+      padding: 18px;
+      font-size: 18px;
+      border-radius: 12px;
       border: none;
-      background: #222;
+      background: #1c1c1c;
       color: #eee;
       resize: none;
+      line-height: 1.5;
     }
-    input {
+    input, select {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
       font-size: 16px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
       background: #222;
       color: #eee;
@@ -98,11 +106,19 @@
 </head>
 <body>
   <h2>Generador de Comentarios</h2>
-  <p style="text-align:center">Selecciona una plantilla base, serie/modelo y acciones realizadas:</p>
+  <p>Selecciona un saludo, una plantilla base, serie/modelo y acciones realizadas:</p>
+
+  <!-- Saludo -->
+  <label for="saludo">Saludo inicial:</label>
+  <select id="saludo">
+    <option value="Buenos días">Buenos días</option>
+    <option value="Buenas tardes">Buenas tardes</option>
+    <option value="Buenas noches">Buenas noches</option>
+  </select>
 
   <!-- Plantillas -->
   <label for="plantilla">Plantilla de comentario:</label>
-  <select id="plantilla" style="margin-top:10px; font-size:16px; padding:8px; width:100%; border-radius:8px;"></select>
+  <select id="plantilla"></select>
 
   <!-- Serie y modelo -->
   <h3>Datos del equipo</h3>
@@ -123,21 +139,27 @@
   <script>
     // Plantillas iniciales
     const plantillasBase = [
-      "Buenos días, se revisa el requerimiento y se realiza el siguiente procedimiento:",
-      "Estimado usuario, se efectúan las siguientes acciones para atender el requerimiento:",
-      "Se realiza análisis y se aplican los procedimientos correspondientes:"
+      "se revisa el requerimiento y se realiza el siguiente procedimiento:",
+      "se efectúan las siguientes acciones para atender el requerimiento:",
+      "se realiza análisis y se aplican los procedimientos correspondientes:"
     ];
 
-    // Acciones disponibles
-    const acciones = [
-      "Se ejecuta sfc /scannow",
-      "Se limpian archivos temporales",
-      "Se limpia imagen de Windows",
-      "Se realiza desfragmentación de disco",
-      "Se aplica batch de lentitud",
-      "Se ejecuta HP Diagnostic",
-      "Se reconstruye indización de archivos"
-    ];
+// Acciones disponibles
+const acciones = [
+  "Se ejecuta sfc /scannow",
+  "Se limpian archivos temporales",
+  "Se limpia imagen de Windows",
+  "Se realiza desfragmentación de disco",
+  "Se aplica batch de lentitud",
+  "Se ejecuta HP Diagnostic",
+  "Se reconstruye indización de archivos",
+  "Se configura perfil de usuario",
+  "Se configura correo",
+  "Se configuran sistemas",
+  "Se configura proxy",
+  "Se instala Adobe Acrobat PDF DC"
+];
+
 
     function cargarPlantillas() {
       const select = document.getElementById("plantilla");
@@ -163,6 +185,7 @@
     }
 
     function generarComentario() {
+      const saludo = document.getElementById("saludo").value;
       const base = document.getElementById("plantilla").value;
       const serie = document.getElementById("serie").value.trim();
       const modelo = document.getElementById("modelo").value.trim();
@@ -173,11 +196,10 @@
 
       let datosEquipo = "";
       if (serie || modelo) {
-        datosEquipo = "\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
+        datosEquipo = "\n\n---\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
       }
 
-      // Serie y modelo SIEMPRE al final del comentario
-      document.getElementById("resultado").value = base + "\n" + accionesTexto + datosEquipo;
+      document.getElementById("resultado").value = `${saludo}, ${base}\n\n${accionesTexto}${datosEquipo}`;
     }
 
     function limpiarSeleccion() {
