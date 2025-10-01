@@ -10,6 +10,12 @@
       color: #eee;
       padding: 20px;
     }
+    h1 {
+      text-align: center;
+      font-size: 20px;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
     h2 {
       color: #4caf50;
       text-align: center;
@@ -102,9 +108,17 @@
       display: none;
       font-weight: bold;
     }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
+  <h1>Creado por Julio Adones</h1>
+
   <h2>Generador de Comentarios</h2>
   <p>Selecciona un saludo, una plantilla base, serie/modelo y acciones realizadas:</p>
 
@@ -113,7 +127,6 @@
   <select id="saludo">
     <option value="Buenos días">Buenos días</option>
     <option value="Buenas tardes">Buenas tardes</option>
-    <option value="Buenas noches">Buenas noches</option>
   </select>
 
   <!-- Plantillas -->
@@ -136,6 +149,8 @@
   <button onclick="copiarTexto()">📋 Copiar al portapapeles</button>
   <div id="mensaje" class="mensaje"></div>
 
+  <footer>Creado por Julio Adones</footer>
+
   <script>
     // Plantillas iniciales
     const plantillasBase = [
@@ -144,22 +159,23 @@
       "se realiza análisis y se aplican los procedimientos correspondientes:"
     ];
 
-// Acciones disponibles
-const acciones = [
-  "Se ejecuta sfc /scannow",
-  "Se limpian archivos temporales",
-  "Se limpia imagen de Windows",
-  "Se realiza desfragmentación de disco",
-  "Se aplica batch de lentitud",
-  "Se ejecuta HP Diagnostic",
-  "Se reconstruye indización de archivos",
-  "Se configura perfil de usuario",
-  "Se configura correo",
-  "Se configuran sistemas",
-  "Se configura proxy",
-  "Se instala Adobe Acrobat PDF DC"
-];
-
+    // Acciones disponibles
+    const acciones = [
+      "Se ejecuta sfc /scannow",
+      "Se limpian archivos temporales",
+      "Se limpia imagen de Windows",
+      "Se realiza desfragmentación de disco",
+      "Se aplica batch de lentitud",
+      "Se ejecuta HP Diagnostic",
+      "Se reconstruye indización de archivos",
+      "Se configura perfil de usuario",
+      "Se configura correo",
+      "Se configuran sistemas",
+      "Se configura proxy",
+      "Se instala Adobe Acrobat PDF DC",
+      "Se realizan pruebas en paralelo con usuario NOMBRE: XXXXXXXX Equipo este operativo según revisión realizada por usuario.",
+      "Se realizan pruebas técnicas en el equipo con cuentas de prueba de MDA, ya que usuario no cuenta con disponibilidad para realizar las pruebas y en caso de que el problema persista se le solicita objetar requerimiento."
+    ];
 
     function cargarPlantillas() {
       const select = document.getElementById("plantilla");
@@ -196,7 +212,7 @@ const acciones = [
 
       let datosEquipo = "";
       if (serie || modelo) {
-        datosEquipo = "\n\n---\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
+        datosEquipo = "\n---\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
       }
 
       document.getElementById("resultado").value = `${saludo}, ${base}\n\n${accionesTexto}${datosEquipo}`;
@@ -214,7 +230,12 @@ const acciones = [
       msg.textContent = texto;
       msg.style.color = color;
       msg.style.display = "block";
-      setTimeout(() => msg.style.display = "none", 2000);
+      msg.style.opacity = 1;
+      setTimeout(() => {
+        msg.style.transition = "opacity 0.5s";
+        msg.style.opacity = 0;
+        setTimeout(() => msg.style.display = "none", 500);
+      }, 1500);
     }
 
     function copiarTexto() {
