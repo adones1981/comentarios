@@ -228,7 +228,7 @@
       const seleccionadasNormales = Array.from(document.querySelectorAll(".card.seleccionada"))
         .filter(c => accionesNormales.includes(c.textContent));
       let accionesTexto = "";
-      seleccionadasNormales.forEach(c => accionesTexto += "- " + c.textContent + "\n");
+      seleccionadasNormales.forEach(c => accionesTexto += " " + c.textContent + "\n");
 
       // Acciones de pruebas
       const seleccionadasPruebas = Array.from(document.querySelectorAll(".card.seleccionada"))
@@ -236,7 +236,7 @@
       let pruebasTexto = "";
       if (seleccionadasPruebas.length > 0) {
         pruebasTexto = "\n\n";
-        seleccionadasPruebas.forEach(c => pruebasTexto += "- " + c.textContent + "\n");
+        seleccionadasPruebas.forEach(c => pruebasTexto += " " + c.textContent + "\n");
       }
 
       let datosEquipo = "";
