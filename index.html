@@ -246,7 +246,7 @@
 
       let datosEquipo = "";
       if (serie || modelo) {
-        datosEquipo = "\n---\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
+        datosEquipo = "\n\nModelo: " + (modelo || "N/A") + " | Serie: " + (serie || "N/A");
       }
 
       document.getElementById("resultado").value = `${saludo}, ${base}\n\n${accionesTexto}${pruebasTexto}${datosEquipo}`;
